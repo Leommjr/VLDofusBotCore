@@ -7,13 +7,17 @@ data class DofusMap(
     val id: Double,
     val posX: Int,
     val posY: Int,
+    val name: String,
     val outdoor: Boolean,
     val isTransition: Boolean,
-    val hasPriorityOnWorldMap: Boolean
+    val hasPriorityOnWorldMap: Boolean,
+    val capabilities: Int
 ) {
 
     fun getCoordinates(): DofusCoordinates {
         return DofusCoordinates(posX, posY)
     }
+
+    fun canReachHavenBag(): Boolean = capabilities and 8 != 0 && capabilities and 4 != 0
 
 }

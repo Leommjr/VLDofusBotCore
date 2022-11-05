@@ -2,6 +2,7 @@ package fr.lewon.dofus.bot.core.d2o.managers.map
 
 import fr.lewon.dofus.bot.core.VldbManager
 import fr.lewon.dofus.bot.core.d2o.D2OUtil
+import fr.lewon.dofus.bot.core.i18n.I18NUtil
 import fr.lewon.dofus.bot.core.model.maps.DofusMap
 import fr.lewon.dofus.bot.core.model.maps.DofusSubArea
 
@@ -12,31 +13,27 @@ object MapManager : VldbManager {
     override fun initManager() {
         val objects = D2OUtil.getObjects("MapPositions")
         mapById = objects.associate {
-            val id = getStringByKey(it, "id").toDouble()
-            val posX = getStringByKey(it, "posX").toInt()
-            val posY = getStringByKey(it, "posY").toInt()
-            val subAreaId = getStringByKey(it, "subAreaId").toDouble()
+            val id = it["id"].toString().toDouble()
+            val posX = it["posX"].toString().toInt()
+            val posY = it["posY"].toString().toInt()
+            val nameId = it["nameId"].toString().toInt()
+            val name = I18NUtil.getLabel(nameId) ?: "[UNKNOWN_NAME]"
+            val subAreaId = it["subAreaId"].toString().toDouble()
             val subArea = SubAreaManager.getSubArea(subAreaId)
-            val worldMapId = getStringByKey(it, "worldMap").toInt()
+            val worldMapId = it["worldMap"].toString().toInt()
             val worldMap = WorldMapManager.getWorldMap(worldMapId)
-            val isOutdoor = getStringByKey(it, "outdoor").toBoolean()
-            val isTransition = getStringByKey(it, "isTransition").toBoolean()
-            val hasPriorityOnWorldMap = getStringByKey(it, "hasPriorityOnWorldmap").toBoolean()
-            id to DofusMap(subArea, worldMap, id, posX, posY, isOutdoor, isTransition, hasPriorityOnWorldMap)
+            val isOutdoor = it["outdoor"].toString().toBoolean()
+            val isTransition = it["isTransition"].toString().toBoolean()
+            val hasPriorityOnWorldMap = it["hasPriorityOnWorldmap"].toString().toBoolean()
+            val capabilities = it["capabilities"].toString().toInt()
+            id to DofusMap(
+                subArea, worldMap, id, posX, posY, name, isOutdoor, isTransition, hasPriorityOnWorldMap, capabilities
+            )
         }
     }
 
     override fun getNeededManagers(): List<VldbManager> {
         return listOf(SubAreaManager, WorldMapManager)
-    }
-
-    private fun getStringByKey(d2oObject: Map<String, Any>, key: String): String {
-        val value = d2oObject[key]
-        return value?.toString() ?: error("invalid map value for [$key] : $value")
-    }
-
-    fun getAllDofusMaps(): List<DofusMap> {
-        return mapById.values.toList()
     }
 
     fun getDofusMap(id: Double): DofusMap {
