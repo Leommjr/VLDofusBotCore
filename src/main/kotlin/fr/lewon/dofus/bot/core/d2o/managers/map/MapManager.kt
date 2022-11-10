@@ -32,20 +32,15 @@ object MapManager : VldbManager {
         }
     }
 
-    override fun getNeededManagers(): List<VldbManager> {
-        return listOf(SubAreaManager, WorldMapManager)
-    }
+    override fun getNeededManagers() = listOf(SubAreaManager, WorldMapManager)
 
-    fun getDofusMap(id: Double): DofusMap {
-        return mapById[id] ?: error("No map found for id [$id]")
-    }
+    fun getDofusMap(id: Double) = mapById[id]
+        ?: error("No map found for id [$id]")
 
-    fun getDofusMaps(x: Int, y: Int): List<DofusMap> {
-        return mapById.values.filter { it.posX == x && it.posY == y }
-    }
+    fun getDofusMaps(x: Int, y: Int) = getAllMaps().filter { it.posX == x && it.posY == y }
 
-    fun getDofusMaps(subArea: DofusSubArea): List<DofusMap> {
-        return mapById.values.filter { it.subArea === subArea }
-    }
+    fun getDofusMaps(subArea: DofusSubArea) = getAllMaps().filter { it.subArea === subArea }
+
+    fun getAllMaps() = mapById.values
 
 }
