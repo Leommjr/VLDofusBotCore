@@ -14,10 +14,8 @@ data class DofusMap(
     val capabilities: Int
 ) {
 
-    fun getCoordinates(): DofusCoordinates {
-        return DofusCoordinates(posX, posY)
-    }
+    fun getCoordinates() = DofusCoordinates(posX, posY)
 
-    fun canReachHavenBag(): Boolean = capabilities and 8 != 0 && capabilities and 4 != 0
+    fun canReachHavenBag() = capabilities and 8 != 0 && capabilities and 4 != 0
 
 }
