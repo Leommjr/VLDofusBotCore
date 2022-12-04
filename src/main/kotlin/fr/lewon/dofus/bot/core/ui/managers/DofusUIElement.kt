@@ -12,10 +12,10 @@ enum class DofusUIElement(
 ) {
 
     INVENTORY("equipmentUi.xml", OverrideType.REPLACE, "storage", "equipmentUi"),
-    ZAAP_SELECTION("zaapiSelection.xml", OverrideType.ADD_OVERRIDE, "zaapSelection", "window\\d"),
+    ZAAP_SELECTION("zaapiSelection.xml", OverrideType.ADD_OVERRIDE, "zaapSelection", "window[0-9]+"),
     BANNER("banner.xml", OverrideType.REPLACE, "banner", "mainCtr"),
     TREASURE_HUNT("treasureHunt.xml", OverrideType.REPLACE, "treasureHunt", "ctr_hunt"),
-    ARENA("pvpArena.xml", OverrideType.REPLACE, "pvpArena", "window\\d"),
+    ARENA("pvpArena.xml", OverrideType.REPLACE, "pvpArena", "window[0-9]+"),
     MOUNT_PADDOCK("mountPaddock.xml"),
     STORAGE("storage.xml"),
     LVL_UP("LevelUp.xml"),
@@ -29,7 +29,7 @@ enum class DofusUIElement(
         private fun getUIPoint(keyRegex: String): UIPoint? {
             val uiPointByKey = DatUtil.getDatFileContent("Berilia_ui_positions", DofusUIPointByKey::class.java)
                 ?: error("Couldn't get UI position : $keyRegex")
-            return uiPointByKey[keyRegex]
+            return uiPointByKey.entries.firstOrNull { it.key.matches(Regex(keyRegex)) }?.value
         }
 
         fun shouldInitializeXml(xmlFileName: String): Boolean {
