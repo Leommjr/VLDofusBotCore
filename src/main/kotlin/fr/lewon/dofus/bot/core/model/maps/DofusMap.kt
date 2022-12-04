@@ -11,11 +11,11 @@ data class DofusMap(
     val outdoor: Boolean,
     val isTransition: Boolean,
     val hasPriorityOnWorldMap: Boolean,
-    val capabilities: Int
+    val capabilities: Int,
+    val hasPublicPaddock: Boolean
 ) {
-
-    fun getCoordinates() = DofusCoordinates(posX, posY)
-
-    fun canReachHavenBag() = capabilities and 8 != 0 && capabilities and 4 != 0
-
+    val coordinates = DofusCoordinates(posX, posY)
+    val canReachHavenBag = capabilities and 8 != 0 && capabilities and 4 != 0
+    val canFightMonster = capabilities and 16384 != 0
+    val canSpawnMonsters = capabilities and 8192 != 0
 }

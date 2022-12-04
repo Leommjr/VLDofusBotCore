@@ -69,6 +69,23 @@ object WorldGraphUtil {
         characterInfo: DofusCharacterBasicInfo
     ): List<Transition>? {
         val fromVertex = vertices[fromMap.id]?.get(fromZone) ?: return null
+        return doGetPath(listOf(fromVertex), toMaps, characterInfo)
+    }
+
+    fun getPath(
+        fromMaps: List<DofusMap>,
+        toMaps: List<DofusMap>,
+        characterInfo: DofusCharacterBasicInfo
+    ): List<Transition>? {
+        val fromVertices = fromMaps.mapNotNull { getVertex(it.id, 1) }
+        return doGetPath(fromVertices, toMaps, characterInfo)
+    }
+
+    private fun doGetPath(
+        fromVertices: List<Vertex>,
+        toMaps: List<DofusMap>,
+        characterInfo: DofusCharacterBasicInfo
+    ): List<Transition>? {
         val toMapsIds = toMaps.map { it.id }
         var destVertices = vertices.entries
             .filter { toMapsIds.contains(it.key) }
@@ -81,9 +98,9 @@ object WorldGraphUtil {
         }
         val explored = ArrayList<Vertex>()
         var frontier = ArrayList<Node>()
-        val initialNode = Node(null, fromVertex, null)
-        explored.add(fromVertex)
-        frontier.add(initialNode)
+        val initialNodes = fromVertices.map { Node(null, it, null) }
+        explored.addAll(fromVertices)
+        frontier.addAll(initialNodes)
         while (frontier.isNotEmpty()) {
             val newFrontier = ArrayList<Node>()
             for (node in frontier) {

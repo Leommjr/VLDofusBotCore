@@ -26,8 +26,10 @@ object MapManager : VldbManager {
             val isTransition = it["isTransition"].toString().toBoolean()
             val hasPriorityOnWorldMap = it["hasPriorityOnWorldmap"].toString().toBoolean()
             val capabilities = it["capabilities"].toString().toInt()
+            val hasPublicPaddock = it["hasPublicPaddock"].toString().toBoolean()
             id to DofusMap(
-                subArea, worldMap, id, posX, posY, name, isOutdoor, isTransition, hasPriorityOnWorldMap, capabilities
+                subArea, worldMap, id, posX, posY, name, isOutdoor, isTransition, hasPriorityOnWorldMap, capabilities,
+                hasPublicPaddock
             )
         }
     }

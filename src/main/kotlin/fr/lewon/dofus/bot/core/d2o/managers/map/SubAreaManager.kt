@@ -24,13 +24,16 @@ object SubAreaManager : VldbManager {
             val area = AreaManager.getArea(areaId)
             val monsterIds = it["monsters"] as List<Double>
             val mapIds = it["mapIds"] as List<Double>
+            val customWorldMap = it["customWorldMap"] as List<Int>
             val monsters = monsterIds.map { monsterId -> MonsterManager.getMonster(monsterId) }
             val psiAllowed = it["psiAllowed"].toString().toBoolean()
             val displayOnWorldMap = it["displayOnWorldMap"].toString().toBoolean()
             val level = it["level"].toString().toInt()
+            val capturable = it["capturable"].toString().toBoolean()
+            val basicAccountAllowed = it["basicAccountAllowed"].toString().toBoolean()
             id to DofusSubArea(
-                id, worldMap, monsters, mapIds, packId, isConquestVillage,
-                associatedZaapMapId, name, area, psiAllowed, displayOnWorldMap, level
+                id, worldMap, monsters, mapIds, packId, isConquestVillage, customWorldMap,
+                associatedZaapMapId, name, area, psiAllowed, displayOnWorldMap, level, capturable, basicAccountAllowed
             )
         }
     }
